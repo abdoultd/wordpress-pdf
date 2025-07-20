@@ -1184,328 +1184,205 @@ textarea#companyAddress {
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   
 <script>
-
   document.querySelectorAll('input[type="text"], input[type="text"]').forEach(input => {
-  if (!input.parentElement.classList.contains('input-with-pound')) {
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('input-with-pound');
-    input.parentElement.replaceChild(wrapper, input);
-    wrapper.appendChild(input);
-  }
-});
-
-const inputs = document.querySelectorAll('.auto-width');
-
-inputs.forEach(input => {
-  input.style.width = '10px'; // width minimale au départ
-
-  input.addEventListener('input', () => {
-    input.style.width = '10px'; // reset pour recalcul
-    input.style.width = (input.value.length + 1) + 'ch'; // largeur basée sur nb caractères
+    if (!input.parentElement.classList.contains('input-with-pound')) {
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('input-with-pound');
+      input.parentElement.replaceChild(wrapper, input);
+      wrapper.appendChild(input);
+    }
   });
-});
 
-
-    // Initialisation de jsPDF
-    const { jsPDF } = window.jspdf;
-    
-    // Fonctions pour le Certificat Notarié
-    const certInputs = document.querySelectorAll('.input-inline');
-    const measurer = document.getElementById('text-measurer');
-
-    certInputs.forEach(input => {
-      const adjustWidth = () => {
-        measurer.style.font = getComputedStyle(input).font;
-        measurer.textContent = input.value || input.placeholder || "";
-        input.style.width = (measurer.scrollWidth + 10) + "px";
-      };
-
-      input.addEventListener('input', adjustWidth);
-      adjustWidth();
-      
-      // Gestion des bordures
-      input.addEventListener('input', () => {
-        if (input.value.trim() !== '') {
-          input.classList.add('input-no-border');
-        } else {
-          input.classList.remove('input-no-border');
-        }
-      });
+  const inputs = document.querySelectorAll('.auto-width');
+  inputs.forEach(input => {
+    input.style.width = '10px';
+    input.addEventListener('input', () => {
+      input.style.width = '10px';
+      input.style.width = (input.value.length + 1) + 'ch';
     });
+  });
 
-    // Téléchargement du certificat seul
-    /*document.getElementById('downloadCertBtn').addEventListener('click', async function() {
-      this.textContent = "Génération en cours...";
-      this.disabled = true;
-      
-      try {
-        const canvas = await html2canvas(document.getElementById('certificate-wrapper'), {
-          scale: 2,
+  const { jsPDF } = window.jspdf;
+
+  const certInputs = document.querySelectorAll('.input-inline');
+  const measurer = document.getElementById('text-measurer');
+
+  certInputs.forEach(input => {
+    const adjustWidth = () => {
+      measurer.style.font = getComputedStyle(input).font;
+      measurer.textContent = input.value || input.placeholder || "";
+      input.style.width = (measurer.scrollWidth + 10) + "px";
+    };
+
+    input.addEventListener('input', adjustWidth);
+    adjustWidth();
+
+    input.addEventListener('input', () => {
+      if (input.value.trim() !== '') {
+        input.classList.add('input-no-border');
+      } else {
+        input.classList.remove('input-no-border');
+      }
+    });
+  });
+
+  function parseFrenchNumber(str) {
+    if (!str) return NaN;
+    str = str.trim().replace(/\s/g, '').replace(/\./g, '').replace(/,/g, '.');
+    return parseFloat(str);
+  }
+
+  function sumFrenchNumbersFromInput(id) {
+    const value = document.getElementById(id).value;
+    if (!value) return 0;
+    const parts = value.split(';').map(s => s.trim()).filter(s => s !== '');
+    const numbers = parts.map(parseFrenchNumber).filter(n => !isNaN(n));
+    return numbers.reduce((a, b) => a + b, 0);
+  }
+
+  function formatFrenchNumber(num) {
+    return num.toLocaleString('fr-FR', { maximumFractionDigits: 2 });
+  }
+
+  function calculateProfitLoss() {
+    const bankInterestSum = sumFrenchNumbersFromInput('bankInterest');
+    const salesSum = sumFrenchNumbersFromInput('sales');
+    const totalIncome = bankInterestSum + salesSum;
+    document.getElementById('totalIncome').value = formatFrenchNumber(totalIncome);
+
+    const purchasesSum = sumFrenchNumbersFromInput('purchases');
+    document.getElementById('totalCostOfSales').value = formatFrenchNumber(purchasesSum);
+
+    const grossProfit = totalIncome - purchasesSum;
+    document.getElementById('grossProfit').value = formatFrenchNumber(grossProfit);
+
+    const expenseFields = ['travelling', 'postage', 'computers', 'accountancy', 'currency', 'bankCharges', 'rent'];
+    const totalExpenses = expenseFields.map(sumFrenchNumbersFromInput).reduce((a, b) => a + b, 0);
+    document.getElementById('totalExpenses').value = formatFrenchNumber(totalExpenses);
+
+    const netOperatingIncome = grossProfit - totalExpenses;
+    document.getElementById('netOperatingIncome').value = formatFrenchNumber(netOperatingIncome);
+    document.getElementById('netIncome').value = formatFrenchNumber(netOperatingIncome);
+  }
+
+  const profitLossInputIds = [
+    'bankInterest', 'sales', 'purchases',
+    'travelling', 'postage', 'computers',
+    'accountancy', 'currency', 'bankCharges', 'rent'
+  ];
+
+  profitLossInputIds.forEach(id => {
+    document.getElementById(id).addEventListener('input', calculateProfitLoss);
+  });
+
+  function getVal(id) {
+    const val = parseFloat(document.getElementById(id).value);
+    return isNaN(val) ? 0 : val;
+  }
+
+  function calculateBalanceSheet() {
+    const totalCash = getVal('interCompany') + getVal('santander') + getVal('stripe') + getVal('paypal') + getVal('elavon');
+    document.getElementById('totalCash').value = totalCash.toFixed(2);
+
+    const totalDebtors = getVal('debtorsControlAccount');
+    document.getElementById('totalDebtors').value = totalDebtors.toFixed(2);
+
+    const netCurrentAssets = totalCash + totalDebtors;
+    document.getElementById('netCurrentAssets').value = netCurrentAssets.toFixed(2);
+
+    const totalCurrentLiabilities = getVal('corporateTax') + getVal('vatGroup') + getVal('vatServices');
+    document.getElementById('totalCurrentLiabilities').value = totalCurrentLiabilities.toFixed(2);
+
+    const tradeCreditors = getVal('tradeCreditors');
+    const totalCreditors = tradeCreditors + totalCurrentLiabilities;
+    document.getElementById('totalCreditors').value = totalCreditors.toFixed(2);
+
+    const netCurrentAssetsLiabilities = netCurrentAssets - totalCreditors;
+    document.getElementById('netCurrentAssetsLiabilities').value = netCurrentAssetsLiabilities.toFixed(2);
+
+    const totalCreditorsLoans = getVal('loans') + getVal('directLoan');
+    document.getElementById('totalCreditorsLoans').value = totalCreditorsLoans.toFixed(2);
+
+    const totalNetAssets = netCurrentAssetsLiabilities - totalCreditorsLoans;
+    document.getElementById('totalNetAssets').value = totalNetAssets.toFixed(2);
+
+    const totalCapitalReserves = getVal('ordinaryShares') + getVal('retainedEarnings') + getVal('profitForYear');
+    document.getElementById('totalCapitalReserves').value = totalCapitalReserves.toFixed(2);
+  }
+
+  const balanceSheetFields = [
+    'interCompany', 'santander', 'stripe', 'paypal', 'elavon',
+    'debtorsControlAccount', 'tradeCreditors', 'corporateTax',
+    'vatGroup', 'vatServices', 'loans', 'directLoan',
+    'ordinaryShares', 'retainedEarnings', 'profitForYear'
+  ];
+
+  balanceSheetFields.forEach(id => {
+    document.getElementById(id).addEventListener('input', calculateBalanceSheet);
+  });
+
+  calculateProfitLoss();
+  calculateBalanceSheet();
+
+  document.getElementById('downloadAllBtn').addEventListener('click', async function () {
+    this.textContent = "Génération en cours...";
+    this.disabled = true;
+
+    try {
+      const doc = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      doc.deletePage(1);
+
+      const addHtmlContent = async (elementId, title = '') => {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+
+        const originalBg = element.style.backgroundColor;
+        element.style.backgroundColor = 'white';
+
+        const canvas = await html2canvas(element, {
+          scale: 1.2,
           logging: false,
           useCORS: true,
-          allowTaint: true,
-          scrollX: 0,
-          scrollY: 0
+          allowTaint: false,
+          backgroundColor: '#FFFFFF'
         });
-        
-        const imgWidth = 210; // Format A4 en mm
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        
-        const doc = new jsPDF('p', 'mm', 'a4');
-        doc.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
-        doc.save('Certificat_Notarie.pdf');
-      } catch (error) {
-        console.error("Erreur:", error);
-        alert("Erreur lors de la génération");
-      } finally {
-        this.textContent = "Télécharger ce certificat";
-        this.disabled = false;
-      }
-    });*/
-    
-    // Fonctions pour Profit and Loss
-    function parseFrenchNumber(str) {
-      if (!str) return NaN;
-      str = str.trim();
-      str = str.replace(/\s/g, '');
-      str = str.replace(/\./g, '');
-      str = str.replace(/,/g, '.');
-      return parseFloat(str);
-    }
-    
-    function sumFrenchNumbersFromInput(id) {
-      const value = document.getElementById(id).value;
-      if (!value) return 0;
-      const parts = value.split(';').map(s => s.trim()).filter(s => s !== '');
-      const numbers = parts.map(parseFrenchNumber).filter(n => !isNaN(n));
-      return numbers.reduce((a,b) => a + b, 0);
-    }
-    
-    function formatFrenchNumber(num) {
-      return num.toLocaleString('fr-FR', {maximumFractionDigits: 2});
-    }
-    
-    function calculateProfitLoss() {
-      // INCOME
-      const bankInterestSum = sumFrenchNumbersFromInput('bankInterest');
-      const salesSum = sumFrenchNumbersFromInput('sales');
-      const totalIncome = bankInterestSum + salesSum;
-      document.getElementById('totalIncome').value = formatFrenchNumber(totalIncome);
-    
-      // COST OF SALES
-      const purchasesSum = sumFrenchNumbersFromInput('purchases');
-      document.getElementById('totalCostOfSales').value = formatFrenchNumber(purchasesSum);
-    
-      // GROSS PROFIT
-      const grossProfit = totalIncome - purchasesSum;
-      document.getElementById('grossProfit').value = formatFrenchNumber(grossProfit);
-    
-      // EXPENSES
-      const expenseFields = ['travelling', 'postage', 'computers', 'accountancy', 'currency', 'bankCharges', 'rent'];
-      const totalExpenses = expenseFields
-        .map(sumFrenchNumbersFromInput)
-        .reduce((a,b) => a + b, 0);
-      document.getElementById('totalExpenses').value = formatFrenchNumber(totalExpenses);
-    
-      // NET OPERATING INCOME
-      const netOperatingIncome = grossProfit - totalExpenses;
-      document.getElementById('netOperatingIncome').value = formatFrenchNumber(netOperatingIncome);
-    
-      // NET INCOME
-      document.getElementById('netIncome').value = formatFrenchNumber(netOperatingIncome);
-    }
-    
-    // Ajoute l'événement input à tous les champs modifiables pour recalcul automatique
-    const profitLossInputIds = [
-      'bankInterest', 'sales', 'purchases',
-      'travelling', 'postage', 'computers',
-      'accountancy', 'currency', 'bankCharges', 'rent'
-    ];
-    
-    profitLossInputIds.forEach(id => {
-      document.getElementById(id).addEventListener('input', calculateProfitLoss);
-    });
-    
-    // Fonctions pour Balance Sheet
-    function getVal(id) {
-      const val = parseFloat(document.getElementById(id).value);
-      return isNaN(val) ? 0 : val;
-    }
-    
-    function calculateBalanceSheet() {
-      const totalCash = getVal('interCompany') + getVal('santander') + getVal('stripe') + getVal('paypal') + getVal('elavon');
-      document.getElementById('totalCash').value = totalCash.toFixed(2);
-    
-      const totalDebtors = getVal('debtorsControlAccount');
-      document.getElementById('totalDebtors').value = totalDebtors.toFixed(2);
-    
-      const netCurrentAssets = totalCash + totalDebtors;
-      document.getElementById('netCurrentAssets').value = netCurrentAssets.toFixed(2);
-    
-      const totalCurrentLiabilities = getVal('corporateTax') + getVal('vatGroup') + getVal('vatServices');
-      document.getElementById('totalCurrentLiabilities').value = totalCurrentLiabilities.toFixed(2);
-    
-      const tradeCreditors = getVal('tradeCreditors');
-      const totalCreditors = tradeCreditors + totalCurrentLiabilities;
-      document.getElementById('totalCreditors').value = totalCreditors.toFixed(2);
-    
-      const netCurrentAssetsLiabilities = netCurrentAssets - totalCreditors;
-      document.getElementById('netCurrentAssetsLiabilities').value = netCurrentAssetsLiabilities.toFixed(2);
-    
-      const totalCreditorsLoans = getVal('loans') + getVal('directLoan');
-      document.getElementById('totalCreditorsLoans').value = totalCreditorsLoans.toFixed(2);
-    
-      const totalNetAssets = netCurrentAssetsLiabilities - totalCreditorsLoans;
-      document.getElementById('totalNetAssets').value = totalNetAssets.toFixed(2);
-    
-      const totalCapitalReserves = getVal('ordinaryShares') + getVal('retainedEarnings') + getVal('profitForYear');
-      document.getElementById('totalCapitalReserves').value = totalCapitalReserves.toFixed(2);
-    }
-    
-    const balanceSheetFields = [
-      'interCompany', 'santander', 'stripe', 'paypal', 'elavon',
-      'debtorsControlAccount', 'tradeCreditors', 'corporateTax',
-      'vatGroup', 'vatServices', 'loans', 'directLoan',
-      'ordinaryShares', 'retainedEarnings', 'profitForYear'
-    ];
-    
-    balanceSheetFields.forEach(id => {
-      document.getElementById(id).addEventListener('input', calculateBalanceSheet);
-    });
-    
-    // Calculs initiaux
-    calculateProfitLoss();
-    calculateBalanceSheet();
-  document.getElementById('downloadAllBtn').addEventListener('click', async function() {
-  this.textContent = "Génération en cours...";
-  this.disabled = true;
 
-  try {
-    const doc = new jsPDF('p', 'mm', 'a4');
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
+        element.style.backgroundColor = originalBg;
 
-    // Supprimer la première page vide créée par défaut
-    doc.deletePage(1);
+        doc.addPage('a4');
+        doc.setFillColor(255, 255, 255);
+        doc.rect(0, 0, pageWidth, pageHeight, 'F');
 
-    // Fonction pour ajouter une page avec une image (via URL)
-    const addImagePage = async (imgUrl) => {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-
-        img.onload = function() {
-          doc.addPage('a4');
-
-          const ratio = Math.min(
-            (pageWidth - 20) / img.width,
-            (pageHeight - 20) / img.height
-          );
-          const imgWidth = img.width * ratio;
-          const imgHeight = img.height * ratio;
-
-          const x = (pageWidth - imgWidth) / 2;
-          const y = (pageHeight - imgHeight) / 2;
-
-          doc.setFillColor(255, 255, 255);
-          doc.rect(0, 0, pageWidth, pageHeight, 'F');
-
-          doc.addImage(img, 'JPEG', x, y, imgWidth, imgHeight);
-          resolve();
-        };
-
-        img.onerror = () => {
-          console.error("Erreur de chargement de l'image:", imgUrl);
-          resolve();
-        };
-
-        if (!imgUrl.startsWith('/')) {
-          imgUrl = '/' + imgUrl;
+        if (title) {
+          doc.setFontSize(16);
+          doc.setTextColor(0, 0, 0);
+          doc.text(title, 20, 20);
         }
-        img.src = imgUrl;
-      });
-    };
 
-    // Fonction pour capturer un élément HTML et l'ajouter en page PDF
-    const addHtmlContent = async (elementId, title = '') => {
-      const element = document.getElementById(elementId);
-      if (!element) {
-        console.error(`Élément ${elementId} introuvable`);
-        return;
-      }
+        const imgData = canvas.toDataURL('image/jpeg', 0.8);
+        const imgWidth = pageWidth - 40;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      const originalBg = element.style.backgroundColor;
-      element.style.backgroundColor = 'white';
+        doc.addImage(imgData, 'JPEG', 20, title ? 30 : 20, imgWidth, imgHeight);
+      };
 
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        logging: false,
-        useCORS: true,
-        allowTaint: false,
-        backgroundColor: '#FFFFFF',
-        scrollX: 0,
-        scrollY: 0,
-        windowWidth: element.scrollWidth + 50,
-        windowHeight: element.scrollHeight + 50
-      });
+      await addHtmlContent('certificate-wrapper');
+      await addHtmlContent('profit-loss-document');
+      await addHtmlContent('balance-sheet-document');
 
-      element.style.backgroundColor = originalBg;
+      doc.save('Documents_Complets.pdf');
 
-      doc.addPage('a4');
-      doc.setFillColor(255, 255, 255);
-      doc.rect(0, 0, pageWidth, pageHeight, 'F');
-
-      if (title) {
-        doc.setFontSize(16);
-        doc.setTextColor(0, 0, 0);
-        doc.text(title, 20, 20);
-      }
-
-      const imgData = canvas.toDataURL('image/png', 1.0);
-      const imgWidth = pageWidth - 40;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      doc.addImage(imgData, 'PNG', 20, title ? 30 : 20, imgWidth, imgHeight,
-                   null, null, 0, 0, pageWidth - 40, pageHeight - (title ? 40 : 30));
-    };
-
-    // Générer les pages
-    await addHtmlContent('certificate-wrapper');
-    await addImagePage('cert.jpeg');
-    await addImagePage('tab.jpeg');
-    await addHtmlContent('profit-loss-document');
-    await addHtmlContent('balance-sheet-document');
-    // Supprimer les pages en trop (au-delà de 5)
-    while (doc.internal.getNumberOfPages() > 5) {
-      doc.deletePage(doc.internal.getNumberOfPages());
+    } catch (error) {
+      console.error(error);
+      alert("Erreur lors de la génération du PDF: " + error.message);
+    } finally {
+      this.textContent = "Télécharger tous les documents en PDF";
+      this.disabled = false;
     }
+  });
+</script>
 
-    // Générer PDF base64
-    const pdfBase64 = doc.output('datauristring');
-    const base64 = pdfBase64.split(',')[1];
-
-    // Envoyer au serveur
-    const response = await fetch('/save-pdf', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pdfBase64: base64, filename: 'Documents_Complets.pdf' })
-    });
-
-    if (!response.ok) throw new Error("Erreur serveur lors de la sauvegarde");
-
-    alert('PDF téléchargé et sauvegardé avec succès!');
-
-    // Télécharger côté client aussi
-    doc.save('Documents_Complets.pdf');
-
-  } catch (error) {
-    console.error("Erreur lors de la génération:", error);
-    alert("Erreur lors de la génération du PDF: " + error.message);
-  } finally {
-    this.textContent = "Télécharger tous les documents en PDF";
-    this.disabled = false;
-  }
-});
-  </script>
 </body>
 </html>
