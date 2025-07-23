@@ -7,65 +7,52 @@
 
 
 
-   .certificate-container {
+   .certificate-wrapper {
   width: 100%;
   max-width: 850px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.container {
+  width: 100%;
   height: auto;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-height: 1200px;
+  background-size: cover;
+  background-position: center;
   padding: 40px;
   box-sizing: border-box;
-  line-height: 1.6;
-  font-size: 16px;
-  white-space: normal; /* important */
-  word-break: break-word; /* coupe mots trop longs */
-  overflow-wrap: break-word;
 }
-.certificate-text {
+
+.certificate-content {
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.sentence {
+  margin-bottom: 20px;
   text-align: justify;
 }
 
+.input-inline {
+  border: none;
+  border-bottom: 1px dashed #999;
+  background: transparent;
+  font-size: 16px;
+  min-width: 50px;
+  display: inline-block;
+}
 
-    .certificate-content {
-      position: absolute;
-      bottom: 30px;
-      left: 450px;
-      right: 350px;
-    }
-
-    .sentence {
-      font-size: 16px;
-      line-height: 1.6;
-      padding: 12px;
-      white-space: normal;
-      word-wrap: break-word;
-    }
-
-    .input-inline {
-      border: none;
-      outline: none;
-      font-size: 16px;
-      font-family: inherit;
-      background: transparent;
-      min-width: 10px;
-      display: inline-block;
-      width: auto;
-      border-bottom: 1px dashed #999;
-    }
-
-    .input-measure {
-      position: absolute;
-      visibility: hidden;
-      white-space: pre;
-      font-size: 16px;
-      font-family: Arial, sans-serif;
-    }
-
-    .input-no-border {
-      border: none !important;
-      outline: none !important;
-      background-color: transparent;
-    }
+textarea.input-inline {
+  width: 100%;
+  border: none;
+  border-bottom: 1px dashed #999;
+  overflow: hidden;
+  resize: none;
+}
 
     /* Styles pour Profit and Loss */
     .profit-loss .subtitle {
@@ -106,75 +93,85 @@
       font-weight: bold;
     }
     
-    /* Styles pour Balance Sheet */
-    .balance-sheet .subtitle {
-      font-style: italic;
-      color: #7f8c8d;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-    
-    .balance-sheet .section {
-      margin-bottom: 40px;
-    }
-    
-    .balance-sheet .account-item {
-      display: flex;
-      margin-bottom: 8px;
-      padding-left: 20px;
-      align-items: center;
-    }
-    
-    .balance-sheet .account-number {
-      width: 80px;
-      font-weight: bold;
-      color: #555;
-    }
-    
-    .balance-sheet .account-name {
-      flex: 1;
-    }
-    
-    .balance-sheet .account-value input {
-      width: 400px;
-      font-weight: bold;
-      text-align: right;
-      padding: 5px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-    }
-    
-    .balance-sheet .account-value input[readonly] {
-      background-color: #f0f0f0;
-      border-color: #000000;
-    }
-    
-    .balance-sheet .sub-item {
-      padding-left: 40px;
-      font-style: italic;
-      color: #555;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-    
-    .balance-sheet .total, 
-    .balance-sheet .main-total {
-      font-weight: bold;
-      margin-top: 10px;
-      border-top: 1px solid #bdc3c7;
-      padding-top: 7px;
-      padding-left: 20px;
-      display: flex;
-      justify-content: space-between;
-    }
-    
-    .balance-sheet .main-total {
-      font-size: 1.15em;
-      border-top: 2px solid #000000;
-      margin-top: 15px;
-      padding-top: 10px;
-    }
+   /* Remplacer TOUS les styles de Balance Sheet par ceux-ci */
+.balance-sheet {
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.balance-sheet .section {
+  margin-bottom: 10px;
+}
+
+.balance-sheet .account-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 2px;
+  align-items: center;
+}
+
+.balance-sheet .account-number {
+  width: 30px;
+  color: #101010;
+  margin-right: 14px;
+}
+
+.balance-sheet .account-name {
+  flex-grow: 1;
+}
+
+.balance-sheet input {
+  width: 140px;
+  padding:2px 4px;
+  font-size: 1em;
+  text-align: right;
+  border: 1px solid #ccc;
+  border-radius: 3px; 
+  background-color: transparent;
+}
+
+.balance-sheet input[readonly] {
+  background-color: #f0f0f0;
+  border-color: #000;
+  font-weight: bold;
+}
+
+.balance-sheet .sub-item {
+  padding-left: 50px; /* 80px pour le numéro + 15px de marge */
+  font-style: italic;
+  color: #555;
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 2px;
+}
+
+/* Styles pour les totaux - Version corrigée */
+.balance-sheet .total,
+.balance-sheet .main-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  border-top: 2px solid #000;
+  margin-top: 8px;
+  padding-top: 5px;
+  padding-left: 0; /* Suppression du padding gauche */
+  align-items: center;
+}
+
+/* Ajustement spécifique pour l'input des totaux */
+.balance-sheet .total .input-with-pound,
+.balance-sheet .main-total .input-with-pound {
+  width: 180px; /* Largeur identique aux autres inputs */
+}
+
+.balance-sheet .total > div:first-child,
+.balance-sheet .main-total > div:first-child {
+  flex-grow: 1; /* Permet au texte de prendre l'espace disponible */
+}
     
     /* Styles pour les boutons */
     .button-container {
@@ -223,7 +220,7 @@
     .document-container {
   width: 810px; /* <- au lieu de max-width */
   margin: 0 auto 40px;
-  padding: 20px;
+  padding: 8px;
   background: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -237,9 +234,10 @@
     
     h2 {
       color: hsl(0, 0%, 0%);
-      margin-top: 30px;
+      margin-top: 13px;
       border-left: 4px solid #000000;
       padding-left: 10px;
+      font-size: 14px;
     }
     
     /* Styles pour le Certificat Notarié */
@@ -274,7 +272,7 @@
   left: 17%;
   width: 80%;
   font-size: 1.2vw;
-  line-height: 1.5;
+  line-height: 1.3;
   text-align: justify;
 }
 
@@ -287,7 +285,7 @@
 .sentence {
   font-size: 16px;
   margin-bottom: 5px;
-  line-height: 1.6;
+  line-height: 1.3;
   padding: 12px;
   border-radius: 5px;
   white-space: normal;
@@ -381,7 +379,7 @@
   outline: none !important;
 }
 textarea#companyAddress {
-  width: auto;
+  width: 100%;
   min-width: 150px;
   max-width: 100%;
   font-family: inherit;
@@ -392,29 +390,66 @@ textarea#companyAddress {
   background: transparent;
   padding: 0;
   margin: 0;
-  display: inline-block;
-  vertical-align: middle; 
+  display: block; /* Changed from inline-block to block */
+  resize: none;
+  overflow: hidden; /* Changed from auto to hidden */
+  white-space: pre-wrap; /* Preserve line breaks */
+  word-wrap: break-word;
 }
+/* Suppression COMPLÈTE de tous les styles visuels */
 .date-range {
-  margin-bottom: 20px;
-  font-size: 14px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
+.date-range select {
+  all: unset; /* Réinitialise tous les styles */
+  cursor: pointer;
+  min-width: 60px;
+  text-align: center;
+}
+
+.date-range label {
+  white-space: nowrap;
+}
+
+/* Option : Style de texte différent pour les labels */
 .date-range label {
   font-weight: bold;
+  color: #555;
+  margin-right: 3px;
+}
+.address-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
 }
 
-.date-range select {
-  padding: 4px 6px;
-  font-size: 14px;
-  border-radius: 3px;
-  border: 1px solid #ccc;
-  background-color: #fff;
+.address-content {
+  white-space: pre-wrap;
+  visibility: hidden;
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
 }
 
+textarea#companyAddress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-bottom: 1px dashed #999;
+  background: transparent;
+  resize: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -424,30 +459,29 @@ textarea#companyAddress {
 <span id="text-measurer" class="input-measure"></span>
 
 
-  <div class="certificate-wrapper" id="certificate-wrapper">
-<div class="container" id="certificate-container" style="background-image: url('certificat.jpeg');"></div>
- <div class="certificate-text">
-    <div class="content">
-       <div class="sentence">
-  <input class="input-inline auto-width" id="companyName" placeholder="Company Name" />
-  ("the Company") is a company incorporated under the laws of England and Wales with registered number
-  <input class="input-inline auto-width" id="companyNumber" placeholder="Company Number" />
-  having its registered office at<br />
-  <textarea class="input-inline auto-width" id="companyAddress" placeholder="Company Address" rows="2" style="resize:none; overflow:auto;"></textarea>
-</div>
-        <div class="sentence">
-          The above-named signatory
-          is registered as a director of the Company and is authorised to represent the Company.
-        </div>
-
-        <div class="sentence">
-          The above-named signatory
-          appeared before me today and produced satisfactory evidence as to identity and after being duly sworn signed the above statement on oath before me.
-        </div>
+ <div class="certificate-wrapper" id="certificate-wrapper">
+  <div class="container" id="certificate-container" style="background-image: url('certificat.jpg');">
+    <div class="certificate-content">
+      <div class="sentence">
+          <span class="sentence-number">1</span>
+        <input class="input-inline auto-width" id="companyName" placeholder="Company Name" />
+        ("the Company") is a company incorporated under the laws of England and Wales with registered number
+        <input class="input-inline auto-width" id="companyNumber" placeholder="Company Number" />
+        having its registered office at :<br />
+        <div class="address-container">
+       <pre class="address-content" id="companyAddressDisplay"></pre>
+       <textarea class="input-inline" id="companyAddress" placeholder="Company Address" rows="3"></textarea>
+       </div>
+      </div>
+      <div class="sentence">
+       2 The above-named signatory is registered as a director of the Company and is authorised to represent the Company.
+      </div>
+      <div class="sentence">
+       3 The above-named signatory appeared before me today and produced satisfactory evidence as to identity and after being duly sworn signed the above statement on oath before me.
       </div>
     </div>
   </div>
-  </div>
+</div>
 
    <!-- Profit and Loss -->
 <div class="document-container profit-loss financial-form" id="profit-loss-document">
@@ -676,11 +710,9 @@ textarea#companyAddress {
 </select>
 </div>
   <h1>Profit and Loss</h1>
-
-  <p><em>Caution: Enter multiple amounts separated by a semicolon <code>;</code>. Example : <code>180.143,02; 200,50; 0,97</code></em></p>
   <h2>INCOME</h2>
   <div class="item">
-    <div>Bank Interest Received</div>
+    <div>4906 Bank Interest Received</div>
     <div class="input-with-pound">
       <input type="text" id="bankInterest" placeholder="ex: 0,97 ou 180.143,02; 200,50" />
     </div>
@@ -725,35 +757,36 @@ textarea#companyAddress {
 
   <h2>EXPENSES</h2>
   <div class="item">
-    <div>Travelling</div>
+    
+    <div> 7400 Travelling</div>
     <div class="input-with-pound">
       <input type="text" id="travelling" placeholder="ex: 180.143,02; 200,50" />
     </div>
   </div>
 
   <div class="item">
-    <div>Postage and Carriage</div>
+    <div>7501 Postage and Carriage</div>
     <div class="input-with-pound">
       <input type="text" id="postage" placeholder="ex: 180.143,02; 200,50" />
     </div>
   </div>
 
   <div class="item">
-    <div>Computers & Software</div>
+    <div>7552 Computers & Software</div>
     <div class="input-with-pound">
       <input type="text" id="computers" placeholder="ex: 180.143,02; 200,50" />
     </div>
   </div>
 
   <div class="item">
-    <div>Accountancy Fees</div>
+    <div>7602 Accountancy Fees</div>
     <div class="input-with-pound">
       <input type="text" id="accountancy" placeholder="ex: 180.143,02; 200,50" />
     </div>
   </div>
 
   <div class="item">
-    <div>Currency Charges</div>
+    <div>7902 Currency Charges</div>
     <div class="input-with-pound">
       <input type="text" id="currency" placeholder="ex: 180.143,02; 200,50" />
     </div>
@@ -1026,119 +1059,138 @@ textarea#companyAddress {
   <h1>Balance Sheet</h1>
   <!-- ACTIFS COURANTS -->
   <div class="section">
-    <h2>ACTIFS COURANTS (Current Assets)</h2>
-
+   <h2>FIXED ASSET</h2> 
+  <h3>Total Fixed Asset</h3>
+<div class="item total">
+  <h4>CASH AT BANK AND IN HAND</h4>
+</div>
+    
     <div class="account-item">
-      <div class="account-number">1154</div>
+      <div class="account-number">1104</div>
       <div class="account-name">Inter Company Account</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="interCompany" value="0" /></div>
+      <div class="input-with-pound"> <input type="text" id="interCompany" placeholder="ex: 180.143,02; 200,50" /> </div>
     </div>
 
     <div class="account-item">
       <div class="account-number">1200</div>
       <div class="account-name">Santander Account</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="santander" value="0" /></div>
+      <div class="input-with-pound"><input type="text"  placeholder="ex: 180.143,02; 200,50" id="santander"/> </div>
     </div>
 
     <div class="account-item">
-      <div class="account-number">1501</div>
+      <div class="account-number">1201</div>
       <div class="account-name">Stripe Account</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="stripe" value="0" /></div>
+      <div class="input-with-pound"><input type="text" placeholder="ex: 180.143,02; 200,50" id="stripe" /></div>
     </div>
 
     <div class="account-item">
-      <div class="account-number">1800</div>
+      <div class="account-number">1202</div>
       <div class="account-name">Paypal Account</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="paypal" value="0" /></div>
+      <div class="input-with-pound"><input type="text" placeholder="ex: 180.143,02; 200,50" id="paypal" /></div>
     </div>
 
     <div class="account-item">
-      <div class="account-number">1904</div>
+      <div class="account-number">1204</div>
       <div class="account-name">Elavon UK</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="elavon" value="0" /></div>
+      <div class="input-with-pound"><input type="text" placeholder="ex: 180.143,02; 200,50"  id="elavon" /></div>
     </div>
 
-    <div class="total">
-      <div>Total Cash at Bank and in Hand</div>
-      <div class="input-with-pound"><input type="text" id="totalCash" style="font-weight: bold;" readonly /></div>
-    </div>
+    <!-- Version corrigée -->
+<div class="item total">
+  <div>Total Cash at Bank and in Hand</div>
+  <div class="input-with-pound">
+  <input type="text" id="totalCash" value="0" readonly />
+  </div>
+</div>
+
 
     <div class="account-item">
       <div class="account-number">1100</div>
       <div class="account-name">Debtors Control Account</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="debtorsControlAccount" value="0" /></div>
+      <div class="input-with-pound"><input type="text" placeholder="ex: 180.143,02; 200,50" id="debtorsControlAccount" /></div>
     </div>
 
     <div class="total">
       <div>Total Debtors</div>
-      <div class="input-with-pound"><input type="text" id="totalDebtors" style="font-weight: bold;"  readonly /></div>
+      <div class="input-with-pound"><input type="text" id="totalDebtors"  readonly /></div>
     </div>
 
     <div class="main-total">
       <div>Net Current Assets</div>
-      <div class="input-with-pound"><input type="text" id="netCurrentAssets" style="font-weight: bold;" readonly /></div>
+      <div class="input-with-pound"><input type="text" id="netCurrentAssets" readonly /></div>
     </div>
   </div>
 
   <!-- PASSIFS COURANTS -->
   <div class="section">
-    <h2>PASSIFS COURANTS (Current Liabilities)</h2>
-
+    <h2>CREDITORS:AMOUNTS FALLING DUE WITHIN ONE YEAR</h2>
+    <h3>Trade Creditors</h3>
     <div class="account-item">
       <div class="account-number">2100</div>
-      <div class="account-name">Trade Creditors Account</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="tradeCreditors" value="0" /></div>
+      <div class="account-name"> Creditors Control Account</div>
+      <div class="input-with-pound"><input type="text" placeholder="ex: 180.143,02; 200,50"  id="tradeCreditors"  /></div>
+    </div>
+     <div class="total">
+      <div>Total Trade Creditors</div>
+      <div class="input-with-pound"><input type="text" id="totalCurrentLiabilities"  readonly /></div>
+    </div>
+     <h2>Current Liabilities</h2>
+
+    <div class="sub-item">
+      <div class="account-name">Corporation Tax Payable</div>
+      <div class="input-with-pound"><input type="text"placeholder="ex: 180.143,02; 200,50" id="corporateTax" /></div>
     </div>
 
     <div class="sub-item">
-      <div class="account-name">Corporate Tax Payable</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="corporateTax" value="0" /></div>
+      <div class="account-name">VAT Control</div>
+      <div class="input-with-pound"><input type="text"placeholder="ex: 180.143,02; 200,50" id="vatGroup" /></div>
     </div>
 
     <div class="sub-item">
-      <div class="account-name">VAT Group</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="vatGroup" value="0" /></div>
-    </div>
-
-    <div class="sub-item">
-      <div class="account-name">VAT Services</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="vatServices" value="0" /></div>
+      <div class="account-name">VAT Suspense</div>
+      <div class="input-with-pound"><input type="text"placeholder="ex: 180.143,02; 200,50"  id="vatServices" /></div>
     </div>
 
     <div class="total">
       <div>Total Current Liabilities</div>
-      <div class="input-with-pound"><input type="text" id="totalCurrentLiabilities" style="font-weight: bold;" readonly /></div>
+      <div class="input-with-pound"><input type="text" id="totalCurrentLiabilities"  readonly /></div>
+    </div>
+       <div class="total">
+      <div>Total Creditors :amounts falling due within one year</div>
+      <div class="input-with-pound"><input type="text" id="totalCreditors" readonly /></div>
     </div>
 
-    <div class="total">
-      <div>Total Creditors</div>
-      <div class="input-with-pound"><input type="text" id="totalCreditors" style="font-weight: bold;" readonly /></div>
-    </div>
+   
 
     <div class="main-total">
       <div>Net Current Assets (Liabilities)</div>
       <div class="input-with-pound"><input type="text" id="netCurrentAssetsLiabilities" style="font-weight: bold;" readonly /></div>
     </div>
   </div>
+      <div class="main-total">
+      <div>Total Assets Less Current Liabilities </div>
+      <div class="input-with-pound"><input type="text" id="netCurrentAssetsLiabilities" style="font-weight: bold;" readonly /></div>
+    </div>
+  </div>
 
   <!-- PASSIFS À LONG TERME -->
   <div class="section">
-    <h2>PASSIFS À LONG TERME (Long-Term Creditors)</h2>
+    <h2>CRIDITORS:AMOUNTS FALLING DUE AFTER MORE THAN ONE YEAR </h2>
 
     <div class="account-item">
-      <div class="account-number">2000</div>
+      <div class="account-number">2300</div>
       <div class="account-name">Loans</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="loans" value="0" /></div>
+      <div class="input-with-pound"><input type="text" placeholder="ex: 180.143,02; 200,50" id="loans"/></div>
     </div>
 
     <div class="account-item">
-      <div class="account-number">2019</div>
-      <div class="account-name">Direct Loan</div>
-      <div class="input-with-pound"><input type="text" step="0.01" min="0" id="directLoan" value="0" /></div>
+      <div class="account-number">2301</div>
+      <div class="account-name">Directors Loan Accounts (Director 1)</div>
+      <div class="input-with-pound"><input type="text" placeholder="ex: 180.143,02; 200,50" id="directLoan" /></div>
     </div>
 
     <div class="total">
-      <div>Total Creditors (Loans + Direct Loan)</div>
+      <div>Total Creditors : amounts falling due after more than one year</div>
       <div class="input-with-pound"><input type="text" id="totalCreditorsLoans" style="font-weight: bold;" readonly /></div>
     </div>
 
@@ -1150,22 +1202,22 @@ textarea#companyAddress {
 
   <!-- CAPITAUX PROPRES -->
   <div class="section">
-    <h2>CAPITAL ET RÉSERVES (Capital and Reserves)</h2>
+    <h2>CAPITAL AND RESERVES </h2>
 
     <div class="account-item">
       <div class="account-number">3000</div>
-      <div class="account-name">Ordinary Shares</div>
-      <div class="input-with-pound"><input type="text" step="0.01" id="ordinaryShares" value="0" /></div>
+      <div class="account-name"> Ordinary Shares</div>
+      <div class="input-with-pound"><input type="text" placeholder="ex: 180.143,02; 200,50" id="ordinaryShares" /></div>
     </div>
 
     <div class="account-item">
       <div class="account-name">Retained Earnings</div>
-      <div class="input-with-pound"><input type="text" step="0.01" id="retainedEarnings" value="0" /></div>
+      <div class="input-with-pound"><input type="text"placeholder="ex: 180.143,02; 200,50" id="retainedEarnings"/></div>
     </div>
 
     <div class="account-item">
       <div class="account-name">Profit for the Year</div>
-      <div class="input-with-pound"><input type="text" step="0.01" id="profitForYear" value="0" /></div>
+      <div class="input-with-pound"><input type="text"placeholder="ex: 180.143,02; 200,50"  id="profitForYear" /></div>
     </div>
 
     <div class="total">
@@ -1174,15 +1226,31 @@ textarea#companyAddress {
     </div>
   </div>
 </div>
-
+</div>
 <div class="button-container">
   <button id="downloadAllBtn">Download all documents in PDF</button>
 </div>
 
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-  
+  <script> 
+    document.querySelectorAll('.auto-width').forEach(input => {
+  const adjustWidth = () => {
+    const span = document.createElement('span');
+    span.style.visibility = 'hidden';
+    span.style.whiteSpace = 'pre';
+    span.style.font = window.getComputedStyle(input).font;
+    span.textContent = input.value || input.placeholder || ' ';
+    
+    document.body.appendChild(span);
+    input.style.width = `${span.offsetWidth + 10}px`;
+    document.body.removeChild(span);
+  };
+
+  input.addEventListener('input', adjustWidth);
+  adjustWidth();
+});
+  </script>
 <script>
   document.querySelectorAll('input[type="text"], input[type="text"]').forEach(input => {
     if (!input.parentElement.classList.contains('input-with-pound')) {
@@ -1226,43 +1294,58 @@ textarea#companyAddress {
     });
   });
 
-  function parseFrenchNumber(str) {
-    if (!str) return NaN;
-    str = str.trim().replace(/\s/g, '').replace(/\./g, '').replace(/,/g, '.');
-    return parseFloat(str);
+function parseEnglishNumber(str) {
+  if (!str) return NaN;
+  // Supprime les virgules des milliers (ex: "1,000.50" → "1000.50")
+  str = str.trim().replace(/,/g, '');
+  return parseFloat(str);
+}
+
+ function sumEnglishNumbersFromInput(id) {
+  const input = document.getElementById(id);
+  const value = input.value;
+  if (!value) return 0;
+
+  const parts = value.split(';').map(s => s.trim()).filter(s => s !== '');
+  const numbers = parts.map(parseEnglishNumber).filter(n => !isNaN(n));
+
+  // Validation du format anglais
+  if (parts.length !== numbers.length) {
+    input.style.border = "1px solid red";
+    console.error("Invalid English number format in field", id);
+  } else {
+    input.style.border = "";
   }
 
-  function sumFrenchNumbersFromInput(id) {
-    const value = document.getElementById(id).value;
-    if (!value) return 0;
-    const parts = value.split(';').map(s => s.trim()).filter(s => s !== '');
-    const numbers = parts.map(parseFrenchNumber).filter(n => !isNaN(n));
-    return numbers.reduce((a, b) => a + b, 0);
-  }
+  return numbers.reduce((a, b) => a + b, 0);
+}
 
-  function formatFrenchNumber(num) {
-    return num.toLocaleString('fr-FR', { maximumFractionDigits: 2 });
-  }
+ function formatEnglishNumber(num) {
+  return num.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
 
   function calculateProfitLoss() {
-    const bankInterestSum = sumFrenchNumbersFromInput('bankInterest');
-    const salesSum = sumFrenchNumbersFromInput('sales');
+   const bankInterestSum = sumEnglishNumbersFromInput('bankInterest');
+    const salesSum = sumEnglishNumbersFromInput('sales');
     const totalIncome = bankInterestSum + salesSum;
-    document.getElementById('totalIncome').value = formatFrenchNumber(totalIncome);
+    document.getElementById('totalIncome').value = formatEnglishNumber(totalIncome);
 
-    const purchasesSum = sumFrenchNumbersFromInput('purchases');
-    document.getElementById('totalCostOfSales').value = formatFrenchNumber(purchasesSum);
+    const purchasesSum = sumEnglishNumbersFromInput('purchases');
+    document.getElementById('totalCostOfSales').value = formatEnglishNumber(purchasesSum);
 
     const grossProfit = totalIncome - purchasesSum;
-    document.getElementById('grossProfit').value = formatFrenchNumber(grossProfit);
+    document.getElementById('grossProfit').value = formatEnglishNumber(grossProfit);
 
     const expenseFields = ['travelling', 'postage', 'computers', 'accountancy', 'currency', 'bankCharges', 'rent'];
-    const totalExpenses = expenseFields.map(sumFrenchNumbersFromInput).reduce((a, b) => a + b, 0);
-    document.getElementById('totalExpenses').value = formatFrenchNumber(totalExpenses);
+    const totalExpenses = expenseFields.map(sumEnglishNumbersFromInput).reduce((a, b) => a + b, 0);
+    document.getElementById('totalExpenses').value = formatEnglishNumber(totalExpenses);
 
     const netOperatingIncome = grossProfit - totalExpenses;
-    document.getElementById('netOperatingIncome').value = formatFrenchNumber(netOperatingIncome);
-    document.getElementById('netIncome').value = formatFrenchNumber(netOperatingIncome);
+    document.getElementById('netOperatingIncome').value = formatEnglishNumber(netOperatingIncome);
+    document.getElementById('netIncome').value = formatEnglishNumber(netOperatingIncome);
   }
 
   const profitLossInputIds = [
@@ -1275,39 +1358,56 @@ textarea#companyAddress {
     document.getElementById(id).addEventListener('input', calculateProfitLoss);
   });
 
-  function getVal(id) {
-    const val = parseFloat(document.getElementById(id).value);
+ function getVal(id) {
+  const input = document.getElementById(id);
+  const val = parseEnglishNumber(input.value);
+  
+  // Exemple : Bloquer les valeurs négatives pour les comptes bancaires
+  if (['santander', 'stripe', 'paypal'].includes(id) && val < 0) {
+    input.style.border = "1px solid red";
+    return 0;
+  } else {
+    input.style.border = "";
     return isNaN(val) ? 0 : val;
   }
+}
+function formatEnglishNumber(num) {
+  return num.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
 
   function calculateBalanceSheet() {
     const totalCash = getVal('interCompany') + getVal('santander') + getVal('stripe') + getVal('paypal') + getVal('elavon');
-    document.getElementById('totalCash').value = totalCash.toFixed(2);
+    document.getElementById('totalCash').value =formatEnglishNumber(totalCash);
 
     const totalDebtors = getVal('debtorsControlAccount');
-    document.getElementById('totalDebtors').value = totalDebtors.toFixed(2);
+    document.getElementById('totalDebtors').value =formatEnglishNumber( totalDebtors);
 
     const netCurrentAssets = totalCash + totalDebtors;
-    document.getElementById('netCurrentAssets').value = netCurrentAssets.toFixed(2);
+    document.getElementById('netCurrentAssets').value =formatEnglishNumber(netCurrentAssets);
 
     const totalCurrentLiabilities = getVal('corporateTax') + getVal('vatGroup') + getVal('vatServices');
-    document.getElementById('totalCurrentLiabilities').value = totalCurrentLiabilities.toFixed(2);
+    document.getElementById('totalCurrentLiabilities').value = formatEnglishNumber(totalCurrentLiabilities);
 
     const tradeCreditors = getVal('tradeCreditors');
+    
     const totalCreditors = tradeCreditors + totalCurrentLiabilities;
-    document.getElementById('totalCreditors').value = totalCreditors.toFixed(2);
+    document.getElementById('totalCreditors').value = formatEnglishNumber(totalCreditors);
 
     const netCurrentAssetsLiabilities = netCurrentAssets - totalCreditors;
-    document.getElementById('netCurrentAssetsLiabilities').value = netCurrentAssetsLiabilities.toFixed(2);
+    document.getElementById('netCurrentAssetsLiabilities').value = formatEnglishNumber(netCurrentAssetsLiabilities);
 
     const totalCreditorsLoans = getVal('loans') + getVal('directLoan');
-    document.getElementById('totalCreditorsLoans').value = totalCreditorsLoans.toFixed(2);
+    document.getElementById('totalCreditorsLoans').value = formatEnglishNumber(totalCreditorsLoans);
 
     const totalNetAssets = netCurrentAssetsLiabilities - totalCreditorsLoans;
-    document.getElementById('totalNetAssets').value = totalNetAssets.toFixed(2);
+    document.getElementById('totalNetAssets').value = formatEnglishNumber(totalNetAssets);
+
 
     const totalCapitalReserves = getVal('ordinaryShares') + getVal('retainedEarnings') + getVal('profitForYear');
-    document.getElementById('totalCapitalReserves').value = totalCapitalReserves.toFixed(2);
+    document.getElementById('totalCapitalReserves').value = formatEnglishNumber(totalCapitalReserves);
   }
 
   const balanceSheetFields = [
@@ -1367,8 +1467,46 @@ textarea#companyAddress {
 
         doc.addImage(imgData, 'JPEG', 20, title ? 30 : 20, imgWidth, imgHeight);
       };
+    // Fonction pour ajouter une page avec une image (via URL)
+    const addImagePage = async (imgUrl) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
 
+        img.onload = function() {
+          doc.addPage('a4');
+
+          const ratio = Math.min(
+            (pageWidth - 20) / img.width,
+            (pageHeight - 20) / img.height
+          );
+          const imgWidth = img.width * ratio;
+          const imgHeight = img.height * ratio;
+
+          const x = (pageWidth - imgWidth) / 2;
+          const y = (pageHeight - imgHeight) / 2;
+
+          doc.setFillColor(255, 255, 255);
+          doc.rect(0, 0, pageWidth, pageHeight, 'F');
+
+          doc.addImage(img, 'JPEG', x, y, imgWidth, imgHeight);
+          resolve();
+        };
+
+        img.onerror = () => {
+          console.error("Erreur de chargement de l'image:", imgUrl);
+          resolve();
+        };
+
+        if (!imgUrl.startsWith('/')) {
+          imgUrl = '/' + imgUrl;
+        }
+        img.src = imgUrl;
+      });
+    };
       await addHtmlContent('certificate-wrapper');
+      await addImagePage('cert.jpeg');
+      await addImagePage('tab.jpeg');
       await addHtmlContent('profit-loss-document');
       await addHtmlContent('balance-sheet-document');
 
