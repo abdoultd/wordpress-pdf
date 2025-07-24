@@ -423,32 +423,40 @@ textarea#companyAddress {
 }
 .address-container {
   position: relative;
-  display: inline-block;
+  display: block; /* Changé de inline-block à block pour une meilleure gestion */
   width: 100%;
+  margin-left: 0px; /* Conserve l'indentation */
+  min-height: auto; /* Supprime la hauteur fixe */
 }
 
-.address-content {
-  white-space: pre-wrap;
-  visibility: hidden;
-  margin: 0;
-  padding: 0;
-  border: none;
-  font-family: inherit;
-  font-size: inherit;
-}
-
-textarea#companyAddress {
-  position: absolute;
-  top: 0;
-  left: 0;
+.address-field {
   width: 100%;
-  height: 100%;
+  min-height: 1.5em; /* Hauteur minimale d'une ligne */
   border: none;
   border-bottom: 1px dashed #999;
   background: transparent;
   resize: none;
   overflow: hidden;
+  font: inherit;
+  line-height: 1.4;
+  padding: 2px 0;
+  white-space:nowrap;
+  word-wrap: break-word;
+  display: block;
+  overflow-x: auto;
+}
+
+/* Ajoutez ceci pour une meilleure gestion dynamique */
+.address-display {
   white-space: pre-wrap;
+  word-wrap: break-word;
+  padding: 2px 0;
+  line-height: 1.4;
+  visibility: hidden;
+  position: absolute;
+}
+.sentence-number {
+  font-weight: bold;
 }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -463,21 +471,23 @@ textarea#companyAddress {
   <div class="container" id="certificate-container" style="background-image: url('certificat.jpg');">
     <div class="certificate-content">
       <div class="sentence">
-          <span class="sentence-number">1</span>
-        <input class="input-inline auto-width" id="companyName" placeholder="Company Name" />
+       <span class="sentence-number">1</span>
+       <input class="input-inline auto-width" id="companyName" placeholder="Company Name" />
         ("the Company") is a company incorporated under the laws of England and Wales with registered number
-        <input class="input-inline auto-width" id="companyNumber" placeholder="Company Number" />
-        having its registered office at :<br />
-        <div class="address-container">
-       <pre class="address-content" id="companyAddressDisplay"></pre>
-       <textarea class="input-inline" id="companyAddress" placeholder="Company Address" rows="3"></textarea>
+       <input class="input-inline auto-width" id="companyNumber" placeholder="Company Number" />
+       having its registered office at :<br>
+       <div class="address-container">
+       <textarea id="companyAddress" class="address-field" placeholder="e.g.: 2nd Floor, College House, 17 King Edwards Road, Ruislip, London, HA7 4AE, UNITED KINGDOM"></textarea>
+       <div id="addressDisplay" class="address-display"></div>
        </div>
+   </div>
+      <div class="sentence">
+         <span class="sentence-number">2</span>
+        The above-named signatory is registered as a director of the Company and is authorised to represent the Company.
       </div>
       <div class="sentence">
-       2 The above-named signatory is registered as a director of the Company and is authorised to represent the Company.
-      </div>
-      <div class="sentence">
-       3 The above-named signatory appeared before me today and produced satisfactory evidence as to identity and after being duly sworn signed the above statement on oath before me.
+         <span class="sentence-number">3</span>
+        The above-named signatory appeared before me today and produced satisfactory evidence as to identity and after being duly sworn signed the above statement on oath before me.
       </div>
     </div>
   </div>
@@ -813,15 +823,12 @@ textarea#companyAddress {
     </div>
   </div>
 
-  <h2>NET OPERATING INCOME</h2>
   <div class="item total">
     <div>Net Operating Income</div>
     <div class="input-with-pound">
       <input type="text" id="netOperatingIncome" readonly />
     </div>
   </div>
-
-  <h2>NET INCOME</h2>
   <div class="item total">
     <div>Net Income</div>
     <div class="input-with-pound">
@@ -1131,8 +1138,8 @@ textarea#companyAddress {
       <div class="input-with-pound"><input type="text" placeholder="ex: 180.143,02; 200,50"  id="tradeCreditors"  /></div>
     </div>
      <div class="total">
-      <div>Total Trade Creditors</div>
-      <div class="input-with-pound"><input type="text" id="totalCurrentLiabilities"  readonly /></div>
+    <div>Total Trade Creditors</div>
+    <div class="input-with-pound"><input type="text" id="totalTradecreditors" readonly /></div>
     </div>
      <h2>Current Liabilities</h2>
 
@@ -1152,9 +1159,9 @@ textarea#companyAddress {
     </div>
 
     <div class="total">
-      <div>Total Current Liabilities</div>
-      <div class="input-with-pound"><input type="text" id="totalCurrentLiabilities"  readonly /></div>
-    </div>
+   <div>Total Current Liabilities</div>
+  <div class="input-with-pound"><input type="text" id="totalCurrentLiabilities" readonly /></div>
+   </div>
        <div class="total">
       <div>Total Creditors :amounts falling due within one year</div>
       <div class="input-with-pound"><input type="text" id="totalCreditors" readonly /></div>
@@ -1168,9 +1175,9 @@ textarea#companyAddress {
     </div>
   </div>
       <div class="main-total">
-      <div>Total Assets Less Current Liabilities </div>
-      <div class="input-with-pound"><input type="text" id="netCurrentAssetsLiabilities" style="font-weight: bold;" readonly /></div>
-    </div>
+       <div>Total Assets Less Current Liabilities</div>
+       <div class="input-with-pound"><input type="text" id="totalAssetsLessLiabilities" readonly /></div>
+      </div>
   </div>
 
   <!-- PASSIFS À LONG TERME -->
@@ -1234,22 +1241,33 @@ textarea#companyAddress {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script> 
-    document.querySelectorAll('.auto-width').forEach(input => {
-  const adjustWidth = () => {
-    const span = document.createElement('span');
-    span.style.visibility = 'hidden';
-    span.style.whiteSpace = 'pre';
-    span.style.font = window.getComputedStyle(input).font;
-    span.textContent = input.value || input.placeholder || ' ';
-    
-    document.body.appendChild(span);
-    input.style.width = `${span.offsetWidth + 10}px`;
-    document.body.removeChild(span);
-  };
+    // Configuration du champ d'adresse
+const addressField = document.getElementById('companyAddress');
+const addressDisplay = document.getElementById('addressDisplay');
 
-  input.addEventListener('input', adjustWidth);
-  adjustWidth();
+function updateAddressField() {
+  addressDisplay.textContent = addressField.value;
+  addressField.style.height = 'auto';
+  addressField.style.height = addressDisplay.scrollHeight + 'px';
+}
+
+addressField.addEventListener('paste', function(e) {
+  e.preventDefault();
+  let text = e.clipboardData.getData('text/plain');
+  
+  // Supprime les sauts de ligne et espaces superflus
+  text = text.replace(/[\n\r]+/g, ' ').replace(/\s+/g, ' ').trim();
+  
+  // Met à jour le textarea et le div de prévisualisation
+  addressField.value = text;
+  addressDisplay.textContent = text;
+  
+  // Ajuste la hauteur automatiquement
+  updateAddressField();
 });
+
+// Initialisation
+updateAddressField();
   </script>
 <script>
   document.querySelectorAll('input[type="text"], input[type="text"]').forEach(input => {
@@ -1391,19 +1409,25 @@ function formatEnglishNumber(num) {
     const totalCurrentLiabilities = getVal('corporateTax') + getVal('vatGroup') + getVal('vatServices');
     document.getElementById('totalCurrentLiabilities').value = formatEnglishNumber(totalCurrentLiabilities);
 
-    const tradeCreditors = getVal('tradeCreditors');
-    
-    const totalCreditors = tradeCreditors + totalCurrentLiabilities;
+    const totalTradecreditors = getVal('tradeCreditors');
+    document.getElementById('totalTradecreditors').value =formatEnglishNumber( totalTradecreditors);
+
+    const totalCreditors = totalTradecreditors + totalCurrentLiabilities;
     document.getElementById('totalCreditors').value = formatEnglishNumber(totalCreditors);
 
     const netCurrentAssetsLiabilities = netCurrentAssets - totalCreditors;
     document.getElementById('netCurrentAssetsLiabilities').value = formatEnglishNumber(netCurrentAssetsLiabilities);
+
+    const totalAssetsLessLiabilities = getVal('netCurrentAssetsLiabilities');
+     document.getElementById('totalAssetsLessLiabilities').value = formatEnglishNumber(totalAssetsLessLiabilities);
 
     const totalCreditorsLoans = getVal('loans') + getVal('directLoan');
     document.getElementById('totalCreditorsLoans').value = formatEnglishNumber(totalCreditorsLoans);
 
     const totalNetAssets = netCurrentAssetsLiabilities - totalCreditorsLoans;
     document.getElementById('totalNetAssets').value = formatEnglishNumber(totalNetAssets);
+
+  
 
 
     const totalCapitalReserves = getVal('ordinaryShares') + getVal('retainedEarnings') + getVal('profitForYear');
@@ -1423,7 +1447,42 @@ function formatEnglishNumber(num) {
 
   calculateProfitLoss();
   calculateBalanceSheet();
+  // Fonction pour préparer un élément pour le PDF
+function prepareElementForPDF(elementId) {
+  const element = document.getElementById(elementId);
+  if (!element) return null;
+  
+  const clone = element.cloneNode(true);
+  clone.id = 'pdf-clone-' + elementId;
+  clone.style.visibility = 'visible';
+  clone.style.position = 'static';
+  clone.style.backgroundColor = 'white';
+  
+  element.parentNode.insertBefore(clone, element);
+  element.style.visibility = 'hidden';
+  element.style.position = 'absolute';
+  
+  return { original: element, clone: clone };
+}
+addressField.addEventListener('paste', function(e) {
+  e.preventDefault(); // Empêche le collage par défaut
+  let text = e.clipboardData.getData('text/plain');
+  
+  // Remplace les sauts de ligne par des espaces et supprime les espaces multiples
+  text = text.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+  
+  // Insère le texte nettoyé
+  document.execCommand('insertText', false, text);
+});
 
+// Fonction pour restaurer l'élément original
+function restoreElementAfterPDF(backup) {
+  if (!backup) return;
+  
+  backup.original.style.visibility = '';
+  backup.original.style.position = '';
+  backup.clone.parentNode.removeChild(backup.clone);
+}
   document.getElementById('downloadAllBtn').addEventListener('click', async function () {
     this.textContent = "Génération en cours...";
     this.disabled = true;
@@ -1504,6 +1563,13 @@ function formatEnglishNumber(num) {
         img.src = imgUrl;
       });
     };
+    function prepareForPDF() {
+  const display = document.createElement('div');
+  display.className = 'address-display';
+  display.style.visibility = 'visible';
+  display.textContent = addressField.value;
+  addressField.parentNode.replaceChild(display, addressField);
+}
       await addHtmlContent('certificate-wrapper');
       await addImagePage('cert.jpeg');
       await addImagePage('tab.jpeg');
