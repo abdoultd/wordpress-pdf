@@ -30,11 +30,13 @@
   margin: 0 auto;
   font-size: 16px;
   line-height: 1.6;
+  gap: 12px;
 }
 
 .sentence {
-  margin-bottom: 20px;
+  margin-bottom: 0;
   text-align: justify;
+   padding: 0;
 }
 
 .input-inline {
@@ -384,7 +386,7 @@ textarea#companyAddress {
   max-width: 100%;
   font-family: inherit;
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.4;
   border: none;
   outline: none;
   background: transparent;
@@ -395,6 +397,7 @@ textarea#companyAddress {
   overflow: hidden; /* Changed from auto to hidden */
   white-space: pre-wrap; /* Preserve line breaks */
   word-wrap: break-word;
+  overflow-wrap: break-word
 }
 /* Suppression COMPLÈTE de tous les styles visuels */
 .date-range {
@@ -427,6 +430,7 @@ textarea#companyAddress {
   width: 100%;
   margin-left: 0px; /* Conserve l'indentation */
   min-height: auto; /* Supprime la hauteur fixe */
+  margin-bottom: 20px;
 }
 
 .address-field {
@@ -440,7 +444,7 @@ textarea#companyAddress {
   font: inherit;
   line-height: 1.4;
   padding: 2px 0;
-  white-space:nowrap;
+  white-space:pre-wrap;
   word-wrap: break-word;
   display: block;
   overflow-x: auto;
@@ -457,8 +461,11 @@ textarea#companyAddress {
 }
 .sentence-number {
   font-weight: bold;
+} 
+.sentence:nth-child(1) {
+  margin-bottom: 8px !important; /* Ajustez cette valeur */
 }
-  </style>
+</style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
@@ -1246,28 +1253,31 @@ const addressField = document.getElementById('companyAddress');
 const addressDisplay = document.getElementById('addressDisplay');
 
 function updateAddressField() {
-  addressDisplay.textContent = addressField.value;
+  // Normalise à nouveau pour être sûr
+  let normalizedText = addressField.value.replace(/\s+/g, ' ').trim();
+  addressDisplay.textContent = normalizedText;
+  
+  // Ajuste la hauteur
   addressField.style.height = 'auto';
-  addressField.style.height = addressDisplay.scrollHeight + 'px';
+  addressField.style.height = Math.max(addressDisplay.scrollHeight, 20) + 'px';
+  
+  // Force le reflow
+  void addressField.offsetHeight;
 }
 
 addressField.addEventListener('paste', function(e) {
   e.preventDefault();
   let text = e.clipboardData.getData('text/plain');
   
-  // Supprime les sauts de ligne et espaces superflus
-  text = text.replace(/[\n\r]+/g, ' ').replace(/\s+/g, ' ').trim();
+  // Normalise les sauts de ligne et espaces multiples
+  text = text.replace(/\r?\n/g, ' ')  // Remplace les sauts de ligne par des espaces
+             .replace(/\s+/g, ' ');   // Remplace les espaces multiples par un seul
   
-  // Met à jour le textarea et le div de prévisualisation
+  // Affecte la valeur normalisée
   addressField.value = text;
-  addressDisplay.textContent = text;
-  
-  // Ajuste la hauteur automatiquement
   updateAddressField();
 });
 
-// Initialisation
-updateAddressField();
   </script>
 <script>
   document.querySelectorAll('input[type="text"], input[type="text"]').forEach(input => {
@@ -1464,16 +1474,13 @@ function prepareElementForPDF(elementId) {
   
   return { original: element, clone: clone };
 }
-addressField.addEventListener('paste', function(e) {
-  e.preventDefault(); // Empêche le collage par défaut
-  let text = e.clipboardData.getData('text/plain');
+//addressField.addEventListener('paste', function(e) {
+ // e.preventDefault(); // Empêche le collage par défaut
+  //let text = e.clipboardData.getData('text/plain');
   
-  // Remplace les sauts de ligne par des espaces et supprime les espaces multiples
-  text = text.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-  
-  // Insère le texte nettoyé
-  document.execCommand('insertText', false, text);
-});
+  // ✅ Conserve les sauts de ligne
+  //document.execCommand('insertText', false, text);
+//});
 
 // Fonction pour restaurer l'élément original
 function restoreElementAfterPDF(backup) {
@@ -1563,13 +1570,16 @@ function restoreElementAfterPDF(backup) {
         img.src = imgUrl;
       });
     };
-    function prepareForPDF() {
+ function prepareForPDF() {
   const display = document.createElement('div');
-  display.className = 'address-display';
-  display.style.visibility = 'visible';
-  display.textContent = addressField.value;
+  display.className = 'address-display-pdf';
+  display.style.whiteSpace = 'pre-wrap';
+  display.style.wordWrap = 'break-word';
+  display.textContent = addressField.value.replace(/\n/g, '<br>');
   addressField.parentNode.replaceChild(display, addressField);
 }
+ prepareForPDF(); // <-- ajoute ceci ici !
+
       await addHtmlContent('certificate-wrapper');
       await addImagePage('cert.jpeg');
       await addImagePage('tab.jpeg');
