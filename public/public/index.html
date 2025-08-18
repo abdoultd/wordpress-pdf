@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome - Notarial Certificate</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #dee0de, #b7cabd);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(33, 111, 48, 0.15);
+      padding: 60px 80px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      max-width: 420px;
+      width: 100%;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform 0.3s ease;
+    }
+
+    .container:hover {
+      transform: scale(1.05);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 25px;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+      letter-spacing: 1.2px;
+    }
+
+    button {
+      background-color: #4caf50;
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 16px 48px;
+      box-shadow: 0 6px 18px rgba(76, 175, 80, 0.7);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+
+    button:hover {
+      background-color: #388e3c;
+      box-shadow: 0 8px 22px rgba(56, 142, 60, 0.85);
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 40px 30px;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+      button {
+        width: 100%;
+        padding: 14px 0;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container" role="main" aria-label="Welcome page">
+    <h1>Welcome to Notarial Certificate</h1>
+    <button onclick="window.location.href='formulaire.html'" aria-label="Go to the certificate form">
+      Go to Form
+    </button>
+  </main>
+</body>
+</html>
