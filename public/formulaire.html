@@ -465,6 +465,41 @@ textarea#companyAddress {
 .sentence:nth-child(1) {
   margin-bottom: 8px !important; /* Ajustez cette valeur */
 }
+#companyName {
+  width: 100%;
+  min-width: 150px;
+  max-width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.4;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  resize: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.input-inline {
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-family: inherit;
+  background: transparent;
+  min-width: 50px;
+  display: inline;        /* important : reste dans le flux de texte */
+  width: auto;
+  white-space: normal;    /* autorise retour à la ligne */
+  word-break: break-word; /* casse si trop long */
+  vertical-align: baseline; /* aligne parfaitement avec le texte */
+}
+
+
+
 </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -479,7 +514,7 @@ textarea#companyAddress {
     <div class="certificate-content">
       <div class="sentence">
        <span class="sentence-number">1</span>
-       <input class="input-inline auto-width" id="companyName" placeholder="Company Name" />
+        <input class="input-inline" id="companyName" placeholder="Company Name" />
         ("the Company") is a company incorporated under the laws of England and Wales with registered number
        <input class="input-inline auto-width" id="companyNumber" placeholder="Company Number" />
        having its registered office at :<br>
@@ -1287,15 +1322,6 @@ addressField.addEventListener('paste', function(e) {
       input.parentElement.replaceChild(wrapper, input);
       wrapper.appendChild(input);
     }
-  });
-
-  const inputs = document.querySelectorAll('.auto-width');
-  inputs.forEach(input => {
-    input.style.width = '10px';
-    input.addEventListener('input', () => {
-      input.style.width = '10px';
-      input.style.width = (input.value.length + 1) + 'ch';
-    });
   });
 
   const { jsPDF } = window.jspdf;
